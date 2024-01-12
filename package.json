@@ -1,6 +1,6 @@
 {
   "name": "metametacritic",
-  "description": "Find the film critic closest to your tastes.",
+  "description": "Find the film critic that most closely matches your tastes.",
   "version": "0.0.0",
   "private": true,
   "author": {
