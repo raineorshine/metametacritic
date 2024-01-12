@@ -40,6 +40,10 @@ interface Review {
   url: string
 }
 
+interface ReviewDiffed extends Review {
+  diff: number
+}
+
 /** Fetch all Metacritic reviews for the given movie. */
 export const criticReviews = async (
   name: string,
@@ -77,8 +81,67 @@ export const criticReviews = async (
 }
 
 /** Add a diff property to each review. Diff is equal to the difference between the critic's score and the given user's score. */
-export const diff = async (reviews: Review[], userScore: number): Promise<(Review & { diff: number })[]> =>
+export const diff = async (reviews: Review[], userScore: number): Promise<ReviewDiffed[]> =>
   reviews.map(review => ({
     ...review,
     diff: review.score - userScore,
   }))
+
+/** Aggregate reviews from all critics. */
+export const metameta = async (
+  userScores: Record<string, number>,
+): Promise<
+  {
+    publicationName: string
+    favor: number
+    similarity: number
+    reviews: number
+  }[]
+> => {
+  const films = await Promise.all(
+    Object.keys(userScores).map(async title => {
+      const { reviews, score } = (await criticReviews(title))!
+      const reviewsDiffed = await diff(reviews, userScores[title])
+      return {
+        title,
+        score,
+        reviews: reviewsDiffed,
+      }
+    }),
+  )
+
+  // group reviews by publication
+  // discard title since we are just aggregating diffs at this point
+  const publicationsMap = new Map<string, ReviewDiffed[]>()
+  films.forEach(({ reviews }) => {
+    reviews.forEach(review => {
+      if (!publicationsMap.has(review.publicationName)) {
+        publicationsMap.set(review.publicationName, [])
+      }
+      publicationsMap.get(review.publicationName)!.push(review)
+    })
+  })
+
+  const publications = Array.from(publicationsMap, ([publicationName, reviews], i) => {
+    // maxDiff is the maximum possible difference between the critic's score and the user's score, i.e. the greatest distance a critic could be from the user
+    const maxDiff = reviews.length * 100
+
+    // total net diff measures net total difference between the critic's score and the user's score, indicating whether the critic was generally more or less generous than the user
+    const totalNetDiff = reviews.reduce((acc, review) => acc + review.diff, 0)
+
+    // total absolute diff measures the distance from the user's score, regardless of whether the critic's score was higher or lower
+    const totalAbsDiff = reviews.reduce((acc, review) => acc + Math.abs(review.diff), 0)
+
+    return {
+      publicationName,
+      favor: totalNetDiff / maxDiff,
+      // first divide the absolute total diff by the maximum possible diff
+      // this gives the % of the maximum possible diff between the critic and the user
+      // subtract from 1 to get the % similarity
+      similarity: 1 - totalAbsDiff / maxDiff,
+      reviews: reviews.length,
+    }
+  })
+
+  return publications
+}

@@ -1,5 +1,5 @@
 import { describe, expect, test } from 'vitest'
-import { criticReviews, diff } from './index.js'
+import { criticReviews, diff, metameta } from './index.js'
 
 describe('criticReviews', () => {
   test('success', async () => {
@@ -36,5 +36,18 @@ test('diff', async () => {
       'What would make a 30-ish woman have sex with a 12-year-old boy? Expect director Todd Haynes to throw you thrillingly off balance with peak acting from Julianne Moore and Charles Melton as the lovers and Natalie Portman as the actress eager to go Hollywood with their squirmy moral tale.',
     score: 88,
     url: 'https://abcnews.go.com/GMA/Culture/review-director-todd-haynes-virtuoso-walking-tightrope-humor/story?id=104914907',
+  })
+})
+
+test('metameta', async () => {
+  const result = await metameta({
+    'May December': 20,
+    'All of Us Strangers': 95,
+  })
+  expect(result[0]).toEqual({
+    favor: 0.315,
+    publicationName: 'ABC News',
+    reviews: 2,
+    similarity: 0.635,
   })
 })
