@@ -31,8 +31,23 @@ interface NuxtData {
   ]
 }
 
+interface Review {
+  author: string
+  date: string
+  publicationName: string
+  quote: string
+  score: number
+  url: string
+}
+
 /** Fetch all Metacritic reviews for the given movie. */
-export const criticReviews = async (name: string) => {
+export const criticReviews = async (
+  name: string,
+): Promise<{
+  title: string
+  score: number
+  reviews: Review[]
+}> => {
   const slug = name.toLowerCase().replace(/ /g, '-')
   const url = `https://www.metacritic.com/movie/${slug}/critic-reviews/?sort-by=Publication%20%28A-Z%29`
 
@@ -57,3 +72,10 @@ export const criticReviews = async (name: string) => {
     reviews: reviewsPicked,
   }
 }
+
+/** Add a diff property to each review. Diff is equal to the difference between the critic's score and the given user's score. */
+export const diff = async (reviews: Review[], userScore: number): Promise<(Review & { diff: number })[]> =>
+  reviews.map(review => ({
+    ...review,
+    diff: review.score - userScore,
+  }))
