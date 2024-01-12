@@ -3,7 +3,7 @@ import fetch from 'node-fetch'
 interface NuxtData {
   data: [
     {
-      content: {
+      content?: {
         components: [
           {
             meta: { componentName: string }
@@ -47,7 +47,7 @@ export const criticReviews = async (
   title: string
   score: number
   reviews: Review[]
-}> => {
+} | null> => {
   const slug = name.toLowerCase().replace(/ /g, '-')
   const url = `https://www.metacritic.com/movie/${slug}/critic-reviews/?sort-by=Publication%20%28A-Z%29`
 
@@ -55,8 +55,11 @@ export const criticReviews = async (
   const start = html.indexOf('window.__NUXT__=') + 'window.__NUXT__='.length
   const end = html.indexOf('));</script>') + 2
   const json: NuxtData = eval(html.slice(start, end))
-  const componentData = json.data[0].content.components
-  const reviews = componentData.find(component => component.meta.componentName === 'critic-reviews')?.items || []
+  const content = json.data[0].content
+
+  if (!content) return null
+
+  const reviews = content.components.find(component => component.meta.componentName === 'critic-reviews')?.items || []
   const reviewsPicked = reviews.map(review => ({
     author: review.author,
     date: review.date,
