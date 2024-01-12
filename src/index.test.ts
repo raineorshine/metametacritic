@@ -45,6 +45,7 @@ test('metameta', async () => {
     'All of Us Strangers': 95,
   })
   expect(result[0]).toEqual({
+    meanScore: 89,
     favor: 0.315,
     publicationName: 'ABC News',
     reviews: 2,

@@ -123,6 +123,9 @@ export const metameta = async (
   })
 
   const publications = Array.from(publicationsMap, ([publicationName, reviews], i) => {
+    // total of all scores from this publication
+    const totalScore = reviews.reduce((acc, review) => acc + review.score, 0)
+
     // maxDiff is the maximum possible difference between the critic's score and the user's score, i.e. the greatest distance a critic could be from the user
     const maxDiff = reviews.length * 100
 
@@ -134,6 +137,8 @@ export const metameta = async (
 
     return {
       publicationName,
+      // mean critic score indicates how generous the critic was on average
+      meanScore: totalScore / reviews.length,
       favor: totalNetDiff / maxDiff,
       // first divide the absolute total diff by the maximum possible diff
       // this gives the % of the maximum possible diff between the critic and the user
