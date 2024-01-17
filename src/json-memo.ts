@@ -43,7 +43,8 @@ async function jsonMemo<A extends unknown[], R>(f: (...args: A) => R | Promise<R
 
     if (value === undefined) {
       value = await f(...args)
-      await fs.writeFile(file, JSON.stringify(value))
+      const s = JSON.stringify(value)
+      await fs.writeFile(file, s)
     }
 
     return value

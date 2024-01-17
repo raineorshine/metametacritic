@@ -3,8 +3,10 @@ import { expect, test } from 'vitest'
 import spawn from 'spawn-please'
 
 test('metameta', async () => {
+  const outputFile = 'sample.metameta.csv'
+  await fs.rm(outputFile, { force: true, recursive: true })
   await spawn('node', ['build/bin.js', 'sample.csv'])
-  const output = await fs.readFile('sample.metameta.csv', 'utf8')
+  const output = await fs.readFile(outputFile, 'utf8')
   expect(output).toEqual(`publicationName,meanScore,favor,similarity,reviews
 ABC News,89,0.315,0.635,2
 Arizona Republic,80,0.225,0.725,2

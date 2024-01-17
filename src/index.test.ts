@@ -4,7 +4,7 @@ import { criticReviews, diff, metameta } from './index.js'
 import { cachePath } from './json-memo.js'
 
 afterAll(async () => {
-  await fs.rm(cachePath, { recursive: true })
+  await fs.rm(cachePath, { force: true, recursive: true })
 })
 
 describe('criticReviews', () => {

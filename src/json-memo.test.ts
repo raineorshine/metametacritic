@@ -3,7 +3,7 @@ import { afterEach, expect, test } from 'vitest'
 import jsonMemo, { cachePath } from './json-memo.js'
 
 afterEach(async () => {
-  await fs.rm(cachePath, { recursive: true })
+  await fs.rm(cachePath, { force: true, recursive: true })
 })
 
 test('return a function with the same signature', async () => {
