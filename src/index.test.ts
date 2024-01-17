@@ -1,5 +1,11 @@
-import { describe, expect, test } from 'vitest'
+import fs from 'fs/promises'
+import { afterAll, describe, expect, test } from 'vitest'
 import { criticReviews, diff, metameta } from './index.js'
+import { cachePath } from './json-memo.js'
+
+afterAll(async () => {
+  await fs.rm(cachePath, { recursive: true })
+})
 
 describe('criticReviews', () => {
   test('success', async () => {

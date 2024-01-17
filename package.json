@@ -20,6 +20,7 @@
   "type": "module",
   "scripts": {
     "build": "tsc",
+    "clean": "rm -rf build && rm -rf .json-memo",
     "test": "vitest --exclude build",
     "watch": "tsc --watch"
   },

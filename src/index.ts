@@ -1,4 +1,5 @@
 import fetch from 'node-fetch'
+import jsonMemo from './json-memo.js'
 
 interface NuxtData {
   data: [
@@ -44,8 +45,8 @@ interface ReviewDiffed extends Review {
   diff: number
 }
 
-/** Fetch all Metacritic reviews for the given movie. */
-export const criticReviews = async (
+/** Fetch all Metacritic reviews for the given movie (unmemoized). */
+const _criticReviews = async (
   name: string,
 ): Promise<{
   title: string
@@ -79,6 +80,9 @@ export const criticReviews = async (
     reviews: reviewsPicked,
   }
 }
+
+/** Fetch all Metacritic reviews for the given movie (memoized). */
+export const criticReviews = await jsonMemo(_criticReviews)
 
 /** Add a diff property to each review. Diff is equal to the difference between the critic's score and the given user's score. */
 export const diff = async (reviews: Review[], userScore: number): Promise<ReviewDiffed[]> =>
