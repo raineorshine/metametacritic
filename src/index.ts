@@ -152,5 +152,5 @@ export const metameta = async (
     }
   })
 
-  return publications
+  return publications.sort((a, b) => b.similarity - a.similarity)
 }
