@@ -73,4 +73,18 @@ describe('metameta', () => {
       similarity: 0.95,
     })
   })
+
+  test('0–5/5', async () => {
+    const result = await metameta({
+      'May December': '1/5',
+      'All of Us Strangers': '4.75/5',
+    })
+    expect(result[0]).toEqual({
+      meanScore: 100,
+      favor: 0.05,
+      publicationName: 'BBC',
+      reviews: 1,
+      similarity: 0.95,
+    })
+  })
 })

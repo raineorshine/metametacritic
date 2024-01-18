@@ -93,7 +93,7 @@ export const diff = async (reviews: Review[], userScore: number): Promise<Review
 
 /** Aggregate reviews from all critics. */
 export const metameta = async (
-  userScores: Record<string, number>,
+  userScores: Record<string, string | number>,
 ): Promise<
   {
     publicationName: string
@@ -103,16 +103,18 @@ export const metameta = async (
   }[]
 > => {
   /** True if the score is in the range 0–100 as opposed to 0–1. */
-  const isScoreOf100 = Object.values(userScores).some(score => score > 1)
+  const isScoreOf100 = Object.values(userScores).some(rating => parseInt(rating.toString()) > 1)
 
-  const userScoresOf100 = Object.fromEntries(
-    Object.entries(userScores).map(([title, score]) => [title, score * (isScoreOf100 ? 1 : 100)]),
-  )
+  const userScoresNormalized = Object.entries(userScores).map(([title, ratingRaw]) => {
+    const [rating, maxRating] = typeof ratingRaw === 'string' ? ratingRaw.split('/').map(n => +n) : [ratingRaw]
+    const ratingOf100 = maxRating ? (rating / maxRating) * 100 : isScoreOf100 ? rating : rating * 100
+    return { title, rating: ratingOf100 }
+  })
 
   const films = await Promise.all(
-    Object.keys(userScoresOf100).map(async title => {
+    userScoresNormalized.map(async ({ title, rating }) => {
       const { reviews, score } = (await criticReviews(title))!
-      const reviewsDiffed = await diff(reviews, userScoresOf100[title])
+      const reviewsDiffed = await diff(reviews, rating)
       return {
         title,
         score,
