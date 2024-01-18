@@ -53,7 +53,12 @@ const _criticReviews = async (
   score: number
   reviews: Review[]
 } | null> => {
-  const slug = name.toLowerCase().replace(/ /g, '-')
+  const slug = name
+    .toLowerCase()
+    // remove parenthetical year
+    .replace(/\s*\(\d\d\d\d\)/, '')
+    // replace spaces with dashes
+    .replace(/ /g, '-')
   const url = `https://www.metacritic.com/movie/${slug}/critic-reviews/?sort-by=Publication%20%28A-Z%29`
 
   const html = await fetch(url).then(res => res.text())
