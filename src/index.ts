@@ -102,10 +102,17 @@ export const metameta = async (
     reviews: number
   }[]
 > => {
+  /** True if the score is in the range 0–100 as opposed to 0–1. */
+  const isScoreOf100 = Object.values(userScores).some(score => score > 1)
+
+  const userScoresOf100 = Object.fromEntries(
+    Object.entries(userScores).map(([title, score]) => [title, score * (isScoreOf100 ? 1 : 100)]),
+  )
+
   const films = await Promise.all(
-    Object.keys(userScores).map(async title => {
+    Object.keys(userScoresOf100).map(async title => {
       const { reviews, score } = (await criticReviews(title))!
-      const reviewsDiffed = await diff(reviews, userScores[title])
+      const reviewsDiffed = await diff(reviews, userScoresOf100[title])
       return {
         title,
         score,

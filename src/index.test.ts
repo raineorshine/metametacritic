@@ -45,16 +45,32 @@ test('diff', async () => {
   })
 })
 
-test('metameta', async () => {
-  const result = await metameta({
-    'May December': 20,
-    'All of Us Strangers': 95,
+describe('metameta', () => {
+  test('0–100', async () => {
+    const result = await metameta({
+      'May December': 20,
+      'All of Us Strangers': 95,
+    })
+    expect(result[0]).toEqual({
+      meanScore: 100,
+      favor: 0.05,
+      publicationName: 'BBC',
+      reviews: 1,
+      similarity: 0.95,
+    })
   })
-  expect(result[0]).toEqual({
-    meanScore: 100,
-    favor: 0.05,
-    publicationName: 'BBC',
-    reviews: 1,
-    similarity: 0.95,
+
+  test('0–1', async () => {
+    const result = await metameta({
+      'May December': 0.2,
+      'All of Us Strangers': 0.95,
+    })
+    expect(result[0]).toEqual({
+      meanScore: 100,
+      favor: 0.05,
+      publicationName: 'BBC',
+      reviews: 1,
+      similarity: 0.95,
+    })
   })
 })
