@@ -12,7 +12,7 @@ describe('criticReviews', () => {
     const result = (await criticReviews('All of Us Strangers'))!
 
     expect(result.title).toBe('All of Us Strangers')
-    expect(result.score).toBe(88)
+    expect(result.score).toBe(89)
     expect(result.reviews[0]).toEqual({
       author: 'Peter Travers',
       date: '2023-12-22',

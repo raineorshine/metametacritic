@@ -10,6 +10,7 @@ test('metameta', async () => {
   expect(output).toEqual(`publicationName,meanScore,favor,similarity,reviews
 BBC,100,0.05,0.95,1
 Time Out,100,0.05,0.95,1
+USA Today,100,0.05,0.95,1
 Vox,90,-0.05,0.95,1
 Washington Post,100,0.05,0.95,1
 Boston Globe,88,-0.07,0.9299999999999999,1
