@@ -1,6 +1,11 @@
 import fs from 'fs/promises'
-import { expect, test } from 'vitest'
+import { afterAll, expect, test } from 'vitest'
 import spawn from 'spawn-please'
+import { cachePath } from './json-memo.js'
+
+afterAll(async () => {
+  await fs.rm(cachePath, { force: true, recursive: true })
+})
 
 test('metameta', async () => {
   const outputFile = 'sample.metameta.csv'

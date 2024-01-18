@@ -7,13 +7,6 @@ export const cachePath = '.json-memo'
 /** A set of used cache keys. Used to detect duplicate implicit keys. */
 const keySet = new Set<string>()
 
-/** Returns true if a file exists. */
-const exists = (path: string) =>
-  fs.stat(path).then(
-    () => true,
-    () => false,
-  )
-
 /** Returns a memoized function that caches memoized results to a json file in the cachePath. */
 async function jsonMemo<A extends unknown[], R>(f: (...args: A) => R | Promise<R>) {
   const key = f.name || f.toString()
@@ -21,10 +14,6 @@ async function jsonMemo<A extends unknown[], R>(f: (...args: A) => R | Promise<R
     throw new Error(`Memoization key already exists: ${key}. Use a named function with a different name.`)
   } else {
     keySet.add(key)
-  }
-
-  if (!(await exists(cachePath))) {
-    await fs.mkdir(cachePath)
   }
 
   /** Gets the path of the cache file for the given argument. */
@@ -44,6 +33,7 @@ async function jsonMemo<A extends unknown[], R>(f: (...args: A) => R | Promise<R
     if (value === undefined) {
       value = await f(...args)
       const s = JSON.stringify(value)
+      await fs.mkdir(cachePath, { recursive: true })
       await fs.writeFile(file, s)
     }
 
