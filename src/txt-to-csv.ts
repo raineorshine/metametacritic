@@ -12,8 +12,9 @@ if (!file) {
 }
 
 const text = await fs.readFile(file, 'utf8')
-const parsed = parse(text)
-const ratings = parsed.map(block => {
+const root = parse(text)
+const movies = root[0].children
+const ratings = movies.map(block => {
   const title = block.scope.replace(/\s*- /, '')
   const ratingBlock = block.children.find(child => /- \d+/.test(child.scope))
   const rating = parseInt(ratingBlock?.scope.replace(/\s*- /, '')!, 10)
