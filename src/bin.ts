@@ -13,7 +13,7 @@ if (!csvPath) {
 
 const inputCsv = await fs.readFile(csvPath, 'utf8')
 const rows = csv2json(inputCsv) as { title: string; rating: number }[]
-const userScores = rows.reduce((accum, curr) => {
+const userScores = rows.reduce<Record<string, number>>((accum, curr) => {
   return {
     ...accum,
     [curr.title]: curr.rating,
