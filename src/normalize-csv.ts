@@ -2,6 +2,7 @@
 import fs from 'fs/promises'
 import path from 'path'
 import { csv2json, json2csv } from 'json-2-csv'
+import range from './range.js'
 
 const [file] = process.argv.slice(2)
 
@@ -15,11 +16,13 @@ const csvInput = (await fs.readFile(file, 'utf8'))
   .trim()
   // convert Windows line endings to Unix, otherwise \r will end up in all title property names and values
   .replace(/\r/g, '')
-const json = (csv2json(csvInput) as { title: string; rating: string }[]).map(({ title, rating }) => ({
+const movies = csv2json(csvInput) as { title: string; rating: string }[]
+const upperBound = range(movies.map(movie => movie.rating))
+const moviesNormalized = movies.map(({ title, rating }) => ({
   title: title.replace(/\s+\(\d{4}\)$/, ''),
-  rating: `${rating}/5`,
+  rating: parseFloat(rating.toString()) / upperBound,
 }))
-const csvOutput = json2csv(json, {
+const csvOutput = json2csv(moviesNormalized, {
   excludeKeys: ['movie_id', 'imdb_id', 'tmdb_id', 'average_rating'],
   // reverse heading order to title,rating
   sortHeader: (a, b) => -a.localeCompare(b),

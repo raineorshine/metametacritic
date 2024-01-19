@@ -22,9 +22,9 @@ test('normalize-csv', async () => {
   const output = await fs.readFile(outputFile, 'utf8')
 
   expect(output).toBe(`title,rating
-Schindler's List,4.5/5
-Alien,3/5
-Patton,2.5/5`)
+Schindler's List,0.9
+Alien,0.6
+Patton,0.5`)
 
   await fs.rm(tempDir, { force: true, recursive: true })
 })
