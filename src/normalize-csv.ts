@@ -19,7 +19,7 @@ const csvInput = (await fs.readFile(file, 'utf8'))
 const movies = csv2json(csvInput) as { title: string; rating: string }[]
 const upperBound = range(movies.map(movie => movie.rating))
 const moviesNormalized = movies.map(({ title, rating }) => ({
-  title: title.replace(/\s+\(\d{4}\)$/, ''),
+  title: title.toString().replace(/\s+\(\d{4}\)$/, ''),
   rating: parseFloat(rating.toString()) / upperBound,
 }))
 const csvOutput = json2csv(moviesNormalized, {
