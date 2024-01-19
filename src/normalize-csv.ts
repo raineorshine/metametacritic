@@ -15,7 +15,10 @@ const csvInput = (await fs.readFile(file, 'utf8'))
   .trim()
   // convert Windows line endings to Unix, otherwise \r will end up in all title property names and values
   .replace(/\r/g, '')
-const json = csv2json(csvInput)
+const json = (csv2json(csvInput) as { title: string; rating: string }[]).map(({ title, rating }) => ({
+  title: title.replace(/\s+\(\d{4}\)$/, ''),
+  rating: `${rating}/5`,
+}))
 const csvOutput = json2csv(json, {
   excludeKeys: ['movie_id', 'imdb_id', 'tmdb_id', 'average_rating'],
   // reverse heading order to title,rating
