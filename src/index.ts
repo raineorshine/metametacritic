@@ -37,7 +37,7 @@ interface Review {
   date: string
   publicationName: string
   quote: string
-  score: number
+  rating: number
   url: string
 }
 
@@ -53,7 +53,7 @@ const _criticReviews = async (
   name: string,
 ): Promise<{
   title: string
-  score: number
+  rating: number
   reviews: Review[]
 } | null> => {
   const slug = name
@@ -78,13 +78,13 @@ const _criticReviews = async (
     date: review.date,
     publicationName: review.publicationName,
     quote: review.quote,
-    score: review.score / 100,
+    rating: review.score / 100,
     url: review.url,
   }))
 
   return {
     title: reviews[0].reviewedProduct.title,
-    score: reviews[0].reviewedProduct.criticScoreSummary.score / 100,
+    rating: reviews[0].reviewedProduct.criticScoreSummary.score / 100,
     reviews: reviewsPicked,
   }
 }
@@ -96,12 +96,12 @@ export const criticReviews = await jsonMemo(_criticReviews)
 export const diff = async (reviews: Review[], userScore: number): Promise<ReviewDiffed[]> =>
   reviews.map(review => ({
     ...review,
-    diff: cleanFloat(review.score - userScore),
+    diff: cleanFloat(review.rating - userScore),
   }))
 
 /** Aggregate reviews from all critics. */
 export const metameta = async (
-  userScores: Record<string, string | number>,
+  userRatings: Record<string, string | number>,
 ): Promise<
   {
     publicationName: string
@@ -110,22 +110,22 @@ export const metameta = async (
     reviews: number
   }[]
 > => {
-  /** True if the score is in the range 0–100 as opposed to 0–1. */
-  const isScoreOf100 = Object.values(userScores).some(rating => parseInt(rating.toString()) > 1)
+  /** True if the rating is in the range 0–100 as opposed to 0–1. */
+  const of100 = Object.values(userRatings).some(rating => parseInt(rating.toString()) > 1)
 
-  const userScoresNormalized = Object.entries(userScores).map(([title, ratingRaw]) => {
+  const userRatingsNormalized = Object.entries(userRatings).map(([title, ratingRaw]) => {
     const [rating, maxRating] = typeof ratingRaw === 'string' ? ratingRaw.split('/').map(n => +n) : [ratingRaw]
-    const ratingNormalized = maxRating ? rating / maxRating : isScoreOf100 ? rating / 100 : rating
+    const ratingNormalized = maxRating ? rating / maxRating : of100 ? rating / 100 : rating
     return { title, rating: ratingNormalized }
   })
 
   const films = await Promise.all(
-    userScoresNormalized.map(async ({ title, rating }) => {
-      const { reviews, score } = (await criticReviews(title))!
+    userRatingsNormalized.map(async ({ title, rating }) => {
+      const { reviews, rating: criticRating } = (await criticReviews(title))!
       const reviewsDiffed = await diff(reviews, rating)
       return {
         title,
-        score,
+        rating: criticRating,
         reviews: reviewsDiffed,
       }
     }),
@@ -144,20 +144,20 @@ export const metameta = async (
   })
 
   const publications = Array.from(publicationsMap, ([publicationName, reviews], i) => {
-    // total of all scores from this publication
-    const totalScore = reviews.reduce((acc, review) => acc + review.score, 0)
+    // total of all ratingr from this publication
+    const totalRating = reviews.reduce((acc, review) => acc + review.rating, 0)
 
-    // total net diff measures net total difference between the critic's score and the user's score, indicating whether the critic was generally more or less generous than the user
+    // total net diff measures net total difference between the critic's rating and the user's rating, indicating whether the critic was generally more or less generous than the user
     const totalNetDiff = reviews.reduce((acc, review) => acc + review.diff, 0)
 
-    // total absolute diff measures the distance from the user's score, regardless of whether the critic's score was higher or lower
+    // total absolute diff measures the distance from the user's rating, regardless of whether the critic's rating was higher or lower
     const totalAbsDiff = reviews.reduce((acc, review) => acc + Math.abs(review.diff), 0)
 
     return {
       publicationName,
-      // mean critic score indicates how generous the critic was on average
-      meanScore: cleanFloat(totalScore / reviews.length),
-      // reviews.length is the maximum possible difference between the critic's score and the user's score, i.e. the greatest distance a critic could be from the user
+      // mean critic rating indicates how generous the critic was on average
+      meanRating: cleanFloat(totalRating / reviews.length),
+      // reviews.length is the maximum possible difference between the critic's rating and the user's rating, i.e. the greatest distance a critic could be from the user
       favor: cleanFloat(totalNetDiff / reviews.length),
       // first divide the absolute total diff by the maximum possible diff
       // this gives the % of the maximum possible diff between the critic and the user

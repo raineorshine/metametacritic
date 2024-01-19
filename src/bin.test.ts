@@ -14,7 +14,7 @@ test('bin', async () => {
   const output = await fs.readFile(outputFile, 'utf8')
   // just test the first five lines to avoid churn
   const firstFiveLines = output.split('\n').slice(0, 6).join('\n')
-  expect(firstFiveLines).toEqual(`publicationName,meanScore,favor,similarity,reviews
+  expect(firstFiveLines).toEqual(`publicationName,meanRating,favor,similarity,reviews
 BBC,1,0.05,0.95,1
 Time Out,1,0.05,0.95,1
 USA Today,1,0.05,0.95,1
