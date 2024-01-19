@@ -1,5 +1,6 @@
 import fetch from 'node-fetch'
 import jsonMemo from './json-memo.js'
+import range from './range.js'
 
 interface NuxtData {
   data: [
@@ -110,14 +111,11 @@ export const metameta = async (
     reviews: number
   }[]
 > => {
-  /** True if the rating is in the range 0–100 as opposed to 0–1. */
-  const of100 = Object.values(userRatings).some(rating => parseInt(rating.toString()) > 1)
-
-  const userRatingsNormalized = Object.entries(userRatings).map(([title, ratingRaw]) => {
-    const [rating, maxRating] = typeof ratingRaw === 'string' ? ratingRaw.split('/').map(n => +n) : [ratingRaw]
-    const ratingNormalized = maxRating ? rating / maxRating : of100 ? rating / 100 : rating
-    return { title, rating: ratingNormalized }
-  })
+  const upperBound = range(Object.values(userRatings))
+  const userRatingsNormalized = Object.entries(userRatings).map(([title, ratingRaw]) => ({
+    title,
+    rating: parseFloat(ratingRaw.toString()) / upperBound,
+  }))
 
   const films = await Promise.all(
     userRatingsNormalized.map(async ({ title, rating }) => {
