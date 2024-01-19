@@ -10,7 +10,7 @@ const result = await metameta({
 
 /*
 {
-  meanRating: 89,
+  meanRating: 0.89,
   favor: 0.315,
   publicationName: 'ABC News',
   reviews: 2,
@@ -26,3 +26,9 @@ const result = await metameta({
 - **publicationName** - The name of the publication where the reviews were published.
 - **reviews** - The total number of your films that the publication has reviewed.
 - **similarity** - The percentage similar that the publications ratings were to your ratings (regardless if they were above or below)
+
+# Scripts
+
+There are some other provided scripts that may be useful:
+
+- txt-to-csv - Convert a plain text file with user ratings to csv. Usage: `node build/txt-to-csv.js [MYRATINGR.CSV]`. See `sample.txt` for a sample text file.
