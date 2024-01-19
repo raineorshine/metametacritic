@@ -10,7 +10,11 @@ if (!file) {
   process.exit(1)
 }
 
-const csvInput = await fs.readFile(file, 'utf8')
+const csvInput = (await fs.readFile(file, 'utf8'))
+  // trim trailing newlines, otherwise it will end up in the title field of the last row
+  .trim()
+  // convert Windows line endings to Unix, otherwise \r will end up in all title property names and values
+  .replace(/\r/g, '')
 const json = csv2json(csvInput)
 const csvOutput = json2csv(json, {
   excludeKeys: ['movie_id', 'imdb_id', 'tmdb_id', 'average_rating'],
