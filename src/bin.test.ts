@@ -7,7 +7,7 @@ afterAll(async () => {
   await fs.rm(cachePath, { force: true, recursive: true })
 })
 
-test('metameta', async () => {
+test('bin', async () => {
   const outputFile = 'sample.metameta.csv'
   await fs.rm(outputFile, { force: true, recursive: true })
   await spawn('node', ['build/bin.js', 'sample.csv'])
@@ -15,9 +15,9 @@ test('metameta', async () => {
   // just test the first five lines to avoid churn
   const firstFiveLines = output.split('\n').slice(0, 6).join('\n')
   expect(firstFiveLines).toEqual(`publicationName,meanScore,favor,similarity,reviews
-BBC,100,0.05,0.95,1
-Time Out,100,0.05,0.95,1
-USA Today,100,0.05,0.95,1
-Vox,90,-0.05,0.95,1
-Washington Post,100,0.05,0.95,1`)
+BBC,1,0.05,0.95,1
+Time Out,1,0.05,0.95,1
+USA Today,1,0.05,0.95,1
+Vox,0.9,-0.05,0.95,1
+Washington Post,1,0.05,0.95,1`)
 })

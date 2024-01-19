@@ -45,6 +45,9 @@ interface ReviewDiffed extends Review {
   diff: number
 }
 
+/** Round a float to a reasonable max number of decimal places, without zeros (e.g. 0.04999999999 is rounded to 0.05) */
+const cleanFloat = (n: number, digits = 6): number => parseFloat(n.toFixed(digits))
+
 /** Fetch all Metacritic reviews for the given movie (unmemoized). */
 const _criticReviews = async (
   name: string,
@@ -75,13 +78,13 @@ const _criticReviews = async (
     date: review.date,
     publicationName: review.publicationName,
     quote: review.quote,
-    score: review.score,
+    score: review.score / 100,
     url: review.url,
   }))
 
   return {
     title: reviews[0].reviewedProduct.title,
-    score: reviews[0].reviewedProduct.criticScoreSummary.score,
+    score: reviews[0].reviewedProduct.criticScoreSummary.score / 100,
     reviews: reviewsPicked,
   }
 }
@@ -93,7 +96,7 @@ export const criticReviews = await jsonMemo(_criticReviews)
 export const diff = async (reviews: Review[], userScore: number): Promise<ReviewDiffed[]> =>
   reviews.map(review => ({
     ...review,
-    diff: review.score - userScore,
+    diff: cleanFloat(review.score - userScore),
   }))
 
 /** Aggregate reviews from all critics. */
@@ -112,8 +115,8 @@ export const metameta = async (
 
   const userScoresNormalized = Object.entries(userScores).map(([title, ratingRaw]) => {
     const [rating, maxRating] = typeof ratingRaw === 'string' ? ratingRaw.split('/').map(n => +n) : [ratingRaw]
-    const ratingOf100 = maxRating ? (rating / maxRating) * 100 : isScoreOf100 ? rating : rating * 100
-    return { title, rating: ratingOf100 }
+    const ratingNormalized = maxRating ? rating / maxRating : isScoreOf100 ? rating / 100 : rating
+    return { title, rating: ratingNormalized }
   })
 
   const films = await Promise.all(
@@ -144,9 +147,6 @@ export const metameta = async (
     // total of all scores from this publication
     const totalScore = reviews.reduce((acc, review) => acc + review.score, 0)
 
-    // maxDiff is the maximum possible difference between the critic's score and the user's score, i.e. the greatest distance a critic could be from the user
-    const maxDiff = reviews.length * 100
-
     // total net diff measures net total difference between the critic's score and the user's score, indicating whether the critic was generally more or less generous than the user
     const totalNetDiff = reviews.reduce((acc, review) => acc + review.diff, 0)
 
@@ -156,12 +156,13 @@ export const metameta = async (
     return {
       publicationName,
       // mean critic score indicates how generous the critic was on average
-      meanScore: totalScore / reviews.length,
-      favor: totalNetDiff / maxDiff,
+      meanScore: cleanFloat(totalScore / reviews.length),
+      // reviews.length is the maximum possible difference between the critic's score and the user's score, i.e. the greatest distance a critic could be from the user
+      favor: cleanFloat(totalNetDiff / reviews.length),
       // first divide the absolute total diff by the maximum possible diff
       // this gives the % of the maximum possible diff between the critic and the user
       // subtract from 1 to get the % similarity
-      similarity: 1 - totalAbsDiff / maxDiff,
+      similarity: cleanFloat(1 - totalAbsDiff / reviews.length),
       reviews: reviews.length,
     }
   })
