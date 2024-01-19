@@ -31,4 +31,21 @@ const result = await metameta({
 
 There are some other provided scripts that may be useful:
 
-- txt-to-csv - Convert a plain text file with user ratings to csv. Usage: `node build/txt-to-csv.js [MYRATINGR.CSV]`. See `sample.txt` for a sample text file.
+<table>
+  <tbody>
+    <tr>
+      <td><b>txt-to-csv</b></td>
+      <td>Convert a plain text file with user ratings to csv. See <code>sample.txt</code> for a sample text file.
+        <br />
+        <br />
+        Usage: <code>node build/txt-to-csv.js [MY_RATINGS.TXT]</code></td>
+    </tr>
+    <tr>
+      <td><b>normalize-csv</b></td>
+      <td>Normalize a csv to just title and rating. Output to *.normalized.csv. Useful when combining data from different sources. 
+       <br />
+       <br />
+       Usage: <code>node build/normalize-csv.js [MY_RATINGS.CSV]</code></td>
+    </tr>
+  </tbody>
+</table>
