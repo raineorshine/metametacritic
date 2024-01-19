@@ -22,6 +22,7 @@ Entertainment Weekly,91,0.335,0.625,2
 IndieWire,91,0.335,0.625,2
 LarsenOnFilm,88,0.305,0.625,2
 Los Angeles Times,95,0.375,0.625,2
+ReelViews,75,0.175,0.625,2
 Screen Rant,80,0.225,0.625,2
 The Associated Press,88,0.305,0.625,2
 The Film Stage,83,0.255,0.625,2
@@ -49,7 +50,6 @@ Slashfilm,67.5,0.1,0.5,2
 The Observer (UK),70,0.5,0.5,2
 Time,70,0.5,0.5,1
 Vanity Fair,85,0.275,0.475,2
-ReelViews,75,0.55,0.44999999999999996,1
 Empire,80,0.6,0.4,1
 Film Threat,80,0.6,0.4,1
 The Independent,80,0.6,0.4,1
