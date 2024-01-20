@@ -3,6 +3,9 @@ import fs from 'fs/promises'
 import path from 'path'
 import { csv2json, json2csv } from 'json-2-csv'
 import range from './range.js'
+import minimist from 'minimist'
+
+const options = minimist(process.argv.slice(2)) as { range?: number }
 
 const [file] = process.argv.slice(2)
 
@@ -20,7 +23,7 @@ const movies = csv2json(csvInput) as { title: string; rating: string }[]
 const upperBound = range(movies.map(movie => movie.rating))
 const moviesNormalized = movies.map(({ title, rating }) => ({
   title: title.toString().replace(/\s+\(\d{4}\)$/, ''),
-  rating: parseFloat(rating.toString()) / upperBound,
+  rating: (parseFloat(rating.toString()) / upperBound) * (options.range || 1),
 }))
 const csvOutput = json2csv(moviesNormalized, {
   excludeKeys: ['movie_id', 'imdb_id', 'tmdb_id', 'average_rating'],
