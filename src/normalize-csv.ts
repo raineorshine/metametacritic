@@ -29,6 +29,7 @@ const csvOutput = json2csv(moviesNormalized, {
   excludeKeys: ['movie_id', 'imdb_id', 'tmdb_id', 'average_rating'],
   // reverse heading order to title,rating
   sortHeader: (a, b) => -a.localeCompare(b),
+  delimiter: { field: ', ' },
 })
 const ext = path.extname(file)
 const outputFile = `${file.slice(0, -ext.length)}.normalized.csv`

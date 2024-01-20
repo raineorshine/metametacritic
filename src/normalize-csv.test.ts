@@ -21,10 +21,10 @@ test('normalize-csv', async () => {
   const outputFile = path.join(tempDir, 'sample.normalized.csv')
   const output = await fs.readFile(outputFile, 'utf8')
 
-  expect(output).toBe(`title,rating
-Schindler's List,0.9
-Alien,0.6
-Patton,0.5`)
+  expect(output).toBe(`title, rating
+Schindler's List, 0.9
+Alien, 0.6
+Patton, 0.5`)
 
   await fs.rm(tempDir, { force: true, recursive: true })
 })
@@ -46,10 +46,10 @@ test('--range', async () => {
   const outputFile = path.join(tempDir, 'sample.normalized.csv')
   const output = await fs.readFile(outputFile, 'utf8')
 
-  expect(output).toBe(`title,rating
-Schindler's List,9
-Alien,6
-Patton,5`)
+  expect(output).toBe(`title, rating
+Schindler's List, 9
+Alien, 6
+Patton, 5`)
 
   await fs.rm(tempDir, { force: true, recursive: true })
 })
