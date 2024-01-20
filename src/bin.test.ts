@@ -8,9 +8,10 @@ afterAll(async () => {
 })
 
 test('bin', async () => {
+  const inputFile = 'sample.csv'
   const outputFile = 'sample.metameta.csv'
   await fs.rm(outputFile, { force: true, recursive: true })
-  await spawn('node', ['build/bin.js', 'sample.csv'])
+  await spawn('node', ['build/bin.js', inputFile])
   const output = await fs.readFile(outputFile, 'utf8')
   // just test the first five lines to avoid churn
   const firstFiveLines = output.split('\n').slice(0, 6).join('\n')
