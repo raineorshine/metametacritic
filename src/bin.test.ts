@@ -51,3 +51,29 @@ Washington Post,1,0.05,0.95,1`)
 
   await fs.rm(tempDir, { force: true, recursive: true })
 })
+
+test('infer title and rating fields if there is no heading row', async () => {
+  const tempDir = await fs.mkdtemp(path.join(os.tmpdir(), 'metameta-'))
+  const inputFile = path.join(tempDir, 'sample.csv')
+  const outputFile = path.join(tempDir, 'sample.metameta.csv')
+
+  fs.writeFile(
+    inputFile,
+    `May December, 20
+All of Us Strangers, 95`,
+  )
+
+  await spawn('node', ['build/bin.js', inputFile])
+
+  const output = await fs.readFile(outputFile, 'utf8')
+
+  const firstFiveLines = output.split('\n').slice(0, 6).join('\n')
+  expect(firstFiveLines).toEqual(`publicationName,meanRating,favor,similarity,reviews
+BBC,1,0.05,0.95,1
+Time Out,1,0.05,0.95,1
+USA Today,1,0.05,0.95,1
+Vox,0.9,-0.05,0.95,1
+Washington Post,1,0.05,0.95,1`)
+
+  await fs.rm(tempDir, { force: true, recursive: true })
+})
