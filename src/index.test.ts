@@ -58,6 +58,12 @@ describe('criticReviews', () => {
     expect(result.title).toBe(`Jodorowsky's Dune`)
     expect(result.rating).toBe(0.79)
   })
+
+  test('colon in title', async () => {
+    const result = (await criticReviews('Spider-Man: Across the Spider-Verse'))!
+    expect(result.title).toBe('Spider-Man: Across the Spider-Verse')
+    expect(result.rating).toBe(0.86)
+  })
 })
 
 test('diff', async () => {

@@ -61,8 +61,9 @@ const _criticReviews = async (
     .toLowerCase()
     // remove parenthetical year
     .replace(/['‘’"]|\s*\(\d\d\d\d\)/, '')
-    // replace spaces with dashes
-    .replace(/ /g, '-')
+    // replace spaces, colons, and semicolons with dashes
+    // repleace multiples (e.g. colon + space) with a single dash, not one for each character
+    .replace(/[ :;]+/g, '-')
   const url = `https://www.metacritic.com/movie/${slug}/critic-reviews/?sort-by=Publication%20%28A-Z%29`
 
   const html = await fetch(url).then(res => res.text())
