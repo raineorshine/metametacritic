@@ -49,15 +49,9 @@ interface ReviewDiffed extends Review {
 /** Round a float to a reasonable max number of decimal places, without zeros (e.g. 0.04999999999 is rounded to 0.05) */
 const cleanFloat = (n: number, digits = 6): number => parseFloat(n.toFixed(digits))
 
-/** Fetch all Metacritic reviews for the given movie (unmemoized). */
-const _criticReviews = async (
-  name: string,
-): Promise<{
-  title: string
-  rating: number
-  reviews: Review[]
-} | null> => {
-  const slug = name
+/** Converts a string into a url slug, specifically the one used in metacritic urls. */
+const slugify = (s: string) =>
+  s
     .toLowerCase()
     .normalize('NFD')
     // Remove parenthetical year, quotes, and diacritics.
@@ -67,8 +61,16 @@ const _criticReviews = async (
     // replace spaces, colons, and semicolons with dashes
     // repleace multiples (e.g. colon + space) with a single dash, not one for each character
     .replace(/[ :;]+/g, '-')
-  const url = `https://www.metacritic.com/movie/${slug}/critic-reviews/?sort-by=Publication%20%28A-Z%29`
 
+/** Fetch all Metacritic reviews for the given movie (unmemoized). */
+const _criticReviews = async (
+  name: string,
+): Promise<{
+  title: string
+  rating: number
+  reviews: Review[]
+} | null> => {
+  const url = `https://www.metacritic.com/movie/${slugify(name)}/critic-reviews/?sort-by=Publication%20%28A-Z%29`
   const html = await fetch(url).then(res => res.text())
   const start = html.indexOf('window.__NUXT__=') + 'window.__NUXT__='.length
   const end = html.indexOf('));</script>') + 2
