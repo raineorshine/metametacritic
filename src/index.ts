@@ -59,8 +59,11 @@ const _criticReviews = async (
 } | null> => {
   const slug = name
     .toLowerCase()
-    // remove parenthetical year
-    .replace(/['‘’"]|\s*\(\d\d\d\d\)/, '')
+    .normalize('NFD')
+    // Remove parenthetical year, quotes, and diacritics.
+    // Borrowed from modern-diacritics package.
+    // See: https://github.com/Mitsunee/modern-diacritics/blob/master/src/removeDiacritics.ts
+    .replace(/\p{Diacritic}|['‘’"]|\s*\(\d\d\d\d\)/gu, '')
     // replace spaces, colons, and semicolons with dashes
     // repleace multiples (e.g. colon + space) with a single dash, not one for each character
     .replace(/[ :;]+/g, '-')

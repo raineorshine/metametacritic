@@ -64,6 +64,12 @@ describe('criticReviews', () => {
     expect(result.title).toBe('Spider-Man: Across the Spider-Verse')
     expect(result.rating).toBe(0.86)
   })
+
+  test('utf-8 char in title', async () => {
+    const result = (await criticReviews('Moolaadé'))!
+    expect(result.title).toBe('Moolaadé')
+    expect(result.rating).toBe(0.91)
+  })
 })
 
 test('diff', async () => {
