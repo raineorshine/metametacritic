@@ -44,6 +44,20 @@ describe('criticReviews', () => {
     const result = await criticReviews('thisisdefinitelynotarealmovie')
     expect(result).toBeNull()
   })
+
+  test('curly quote in title', async () => {
+    // user review with curly quote
+    const result = (await criticReviews(`Jodorowsky’s Dune`))!
+    // title that comes back from metacritic is a straight quote
+    expect(result.title).toBe(`Jodorowsky's Dune`)
+    expect(result.rating).toBe(0.79)
+  })
+
+  test('single quote in title', async () => {
+    const result = (await criticReviews(`Jodorowsky's Dune`))!
+    expect(result.title).toBe(`Jodorowsky's Dune`)
+    expect(result.rating).toBe(0.79)
+  })
 })
 
 test('diff', async () => {

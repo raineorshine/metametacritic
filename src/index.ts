@@ -60,7 +60,7 @@ const _criticReviews = async (
   const slug = name
     .toLowerCase()
     // remove parenthetical year
-    .replace(/\s*\(\d\d\d\d\)/, '')
+    .replace(/['‘’"]|\s*\(\d\d\d\d\)/, '')
     // replace spaces with dashes
     .replace(/ /g, '-')
   const url = `https://www.metacritic.com/movie/${slug}/critic-reviews/?sort-by=Publication%20%28A-Z%29`
