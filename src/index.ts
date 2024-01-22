@@ -2,6 +2,7 @@ import fetch from 'node-fetch'
 import jsonMemo from './json-memo.js'
 import range from './range.js'
 import nonNull from './nonNull.js'
+import pMap from 'p-map'
 
 interface NuxtDataRaw<T> {
   data: [
@@ -159,8 +160,9 @@ export const metameta = async (
   }))
 
   const films = (
-    await Promise.all(
-      userRatingsNormalized.map(async ({ title, rating }) => {
+    await pMap(
+      userRatingsNormalized,
+      async ({ title, rating }) => {
         const criticReviewsResult = await criticReviews(title)
         if (!criticReviewsResult) {
           console.warn(`No reviews found for ${title}`)
@@ -173,7 +175,8 @@ export const metameta = async (
           rating: criticRating,
           reviews: reviewsDiffed,
         }
-      }),
+      },
+      { concurrency: 8 },
     )
   ).filter(nonNull)
 

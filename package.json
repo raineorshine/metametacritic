@@ -41,6 +41,7 @@
     "minimist": "^1.2.8",
     "murmurhash3js": "^3.0.1",
     "node-fetch": "^3.3.2",
+    "p-map": "^7.0.1",
     "text-block-parser": "^1.1.1"
   }
 }
