@@ -210,14 +210,14 @@ export const metameta = async (
 
     return {
       publicationName,
-      // mean critic rating indicates how generous the critic was on average
-      meanRating: cleanFloat((totalRating / reviews.length) * outputUpperBound),
-      // reviews.length is the maximum possible difference between the critic's rating and the user's rating, i.e. the greatest distance a critic could be from the user
-      favor: cleanFloat(totalNetDiff / reviews.length),
       // first divide the absolute total diff by the maximum possible diff
       // this gives the % of the maximum possible diff between the critic and the user
       // subtract from 1 to get the % similarity
       similarity: cleanFloat(1 - totalAbsDiff / reviews.length),
+      // mean critic rating indicates how generous the critic was on average
+      meanRating: cleanFloat((totalRating / reviews.length) * outputUpperBound),
+      // reviews.length is the maximum possible difference between the critic's rating and the user's rating, i.e. the greatest distance a critic could be from the user
+      favor: cleanFloat(totalNetDiff / reviews.length),
       reviews: reviews.length,
     }
   })
