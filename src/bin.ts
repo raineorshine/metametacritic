@@ -17,9 +17,15 @@ const rows = csv2json(inputCsv, {
   headerFields: line1.includes('title') && line1.includes('rating') ? undefined : ['title', 'rating'],
 }) as { title: string; rating: number }[]
 const userScores = rows.reduce<Record<string, number>>((accum, curr) => {
+  let { title, rating } = curr
+  if (!rating && title.includes(':')) {
+    const parts = title.split(':')
+    title = parts.slice(0, -1).join(':')
+    rating = parseFloat(parts[parts.length - 1].trim())
+  }
   return {
     ...accum,
-    [curr.title]: curr.rating,
+    [title]: rating,
   }
 }, {})
 
