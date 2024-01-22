@@ -71,7 +71,7 @@ const fetchNuxtData = async <T>(url: string): Promise<T | null> => {
 }
 
 /** Round a float to a reasonable max number of decimal places, without zeros (e.g. 0.04999999999 is rounded to 0.05) */
-const cleanFloat = (n: number, digits = 6): number => parseFloat(n.toFixed(digits))
+const cleanFloat = (n: number, digits = 3): number => parseFloat(n.toFixed(digits))
 
 /** Converts a string into a url slug, specifically the one used in metacritic urls. */
 const slugify = (s: string) =>
