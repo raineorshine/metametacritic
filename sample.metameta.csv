@@ -1,58 +1,58 @@
 publicationName,meanRating,favor,similarity,reviews
-BBC,1,0.05,0.95,1
-Time Out,1,0.05,0.95,1
-USA Today,1,0.05,0.95,1
-Vox,0.9,-0.05,0.95,1
-Washington Post,1,0.05,0.95,1
-Boston Globe,0.88,-0.07,0.93,1
-The Daily Beast,0.8,-0.15,0.85,1
-Collider,0.745,0.17,0.79,2
-Movie Nation,0.755,0.18,0.75,2
-Wall Street Journal,0.7,-0.25,0.75,1
-Arizona Republic,0.8,0.225,0.725,2
-The Hollywood Reporter,0.85,0.275,0.725,2
-Screen Daily,0.9,0.325,0.675,2
-The Guardian,0.9,0.325,0.675,2
-The New Yorker,0.65,0.075,0.675,2
-Total Film,0.9,0.325,0.675,2
-ABC News,0.89,0.315,0.635,2
-TheWrap,0.94,0.365,0.635,2
-Chicago Tribune,0.88,0.305,0.625,2
-Entertainment Weekly,0.91,0.335,0.625,2
-IndieWire,0.91,0.335,0.625,2
-LarsenOnFilm,0.88,0.305,0.625,2
-Los Angeles Times,0.95,0.375,0.625,2
-ReelViews,0.75,0.175,0.625,2
-Screen Rant,0.8,0.225,0.625,2
-The Associated Press,0.88,0.305,0.625,2
-The Film Stage,0.83,0.255,0.625,2
-The New York Times,0.95,0.375,0.625,2
-The Seattle Times,0.88,0.305,0.625,2
-Variety,0.8,0.225,0.625,2
-CineVue,0.6,0.4,0.6,1
-Paste Magazine,0.815,0.24,0.59,2
-The Playlist,0.87,0.295,0.585,2
-Original-Cin,0.955,0.38,0.58,2
-Rolling Stone,1,0.425,0.575,2
-The A.V. Club,1,0.425,0.575,2
-The Irish Times,1,0.425,0.575,2
-The Telegraph,1,0.425,0.575,2
-Observer,0.94,0.365,0.565,2
-RogerEbert.com,0.94,0.365,0.565,2
-Chicago Sun-Times,0.815,0.24,0.56,2
-The Globe and Mail (Toronto),0.865,0.29,0.55,2
-IGN,0.8,0.225,0.525,2
-New York Magazine (Vulture),0.8,0.225,0.525,2
-Austin Chronicle,0.78,0.205,0.515,2
-San Francisco Chronicle,0.875,0.3,0.5,2
-Slant Magazine,0.755,0.18,0.5,2
-Slashfilm,0.675,0.1,0.5,2
-The Observer (UK),0.7,0.5,0.5,2
-Time,0.7,0.5,0.5,1
-Vanity Fair,0.85,0.275,0.475,2
-Empire,0.8,0.6,0.4,1
-Film Threat,0.8,0.6,0.4,1
-The Independent,0.8,0.6,0.4,1
-Little White Lies,0.9,0.7,0.3,1
-The Atlantic,0.98,0.78,0.22,1
-Consequence,1,0.8,0.2,1
+BBC,100,0.05,0.95,1
+Time Out,100,0.05,0.95,1
+USA Today,100,0.05,0.95,1
+Vox,90,-0.05,0.95,1
+Washington Post,100,0.05,0.95,1
+Boston Globe,88,-0.07,0.93,1
+The Daily Beast,80,-0.15,0.85,1
+Collider,74.5,0.17,0.79,2
+Movie Nation,75.5,0.18,0.75,2
+Wall Street Journal,70,-0.25,0.75,1
+Arizona Republic,80,0.225,0.725,2
+The Hollywood Reporter,85,0.275,0.725,2
+Screen Daily,90,0.325,0.675,2
+The Guardian,90,0.325,0.675,2
+The New Yorker,65,0.075,0.675,2
+Total Film,90,0.325,0.675,2
+ABC News,89,0.315,0.635,2
+TheWrap,94,0.365,0.635,2
+Chicago Tribune,88,0.305,0.625,2
+Entertainment Weekly,91,0.335,0.625,2
+IndieWire,91,0.335,0.625,2
+LarsenOnFilm,88,0.305,0.625,2
+Los Angeles Times,95,0.375,0.625,2
+ReelViews,75,0.175,0.625,2
+Screen Rant,80,0.225,0.625,2
+The Associated Press,88,0.305,0.625,2
+The Film Stage,83,0.255,0.625,2
+The New York Times,95,0.375,0.625,2
+The Seattle Times,88,0.305,0.625,2
+Variety,80,0.225,0.625,2
+CineVue,60,0.4,0.6,1
+Paste Magazine,81.5,0.24,0.59,2
+The Playlist,87,0.295,0.585,2
+Original-Cin,95.5,0.38,0.58,2
+Rolling Stone,100,0.425,0.575,2
+The A.V. Club,100,0.425,0.575,2
+The Irish Times,100,0.425,0.575,2
+The Telegraph,100,0.425,0.575,2
+Observer,94,0.365,0.565,2
+RogerEbert.com,94,0.365,0.565,2
+Chicago Sun-Times,81.5,0.24,0.56,2
+The Globe and Mail (Toronto),86.5,0.29,0.55,2
+IGN,80,0.225,0.525,2
+New York Magazine (Vulture),80,0.225,0.525,2
+Austin Chronicle,78,0.205,0.515,2
+San Francisco Chronicle,87.5,0.3,0.5,2
+Slant Magazine,75.5,0.18,0.5,2
+Slashfilm,67.5,0.1,0.5,2
+The Observer (UK),70,0.5,0.5,2
+Time,70,0.5,0.5,1
+Vanity Fair,85,0.275,0.475,2
+Empire,80,0.6,0.4,1
+Film Threat,80,0.6,0.4,1
+The Independent,80,0.6,0.4,1
+Little White Lies,90,0.7,0.3,1
+The Atlantic,98,0.78,0.22,1
+Consequence,100,0.8,0.2,1

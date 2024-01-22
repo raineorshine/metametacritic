@@ -109,7 +109,7 @@ describe('metameta', () => {
       'All of Us Strangers': 95,
     })
     expect(result[0]).toEqual({
-      meanRating: 1,
+      meanRating: 100,
       favor: 0.05,
       publicationName: 'BBC',
       reviews: 1,
@@ -137,7 +137,24 @@ describe('metameta', () => {
       'All of Us Strangers': '4.75/5',
     })
     expect(result[0]).toEqual({
-      meanRating: 1,
+      meanRating: 5,
+      favor: 0.05,
+      publicationName: 'BBC',
+      reviews: 1,
+      similarity: 0.95,
+    })
+  })
+
+  test('custom output range', async () => {
+    const result = await metameta(
+      {
+        'May December': 20,
+        'All of Us Strangers': 95,
+      },
+      { range: 5 },
+    )
+    expect(result[0]).toEqual({
+      meanRating: 5,
       favor: 0.05,
       publicationName: 'BBC',
       reviews: 1,

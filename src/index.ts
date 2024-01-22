@@ -145,6 +145,10 @@ export const diff = async (reviews: Review[], userScore: number): Promise<Review
 /** Aggregate reviews from all critics. */
 export const metameta = async (
   userRatings: Record<string, string | number>,
+  options: {
+    /** Output range. Valid values: 1, 5, 10, 100. */
+    range?: number
+  } = {},
 ): Promise<
   {
     publicationName: string
@@ -154,6 +158,8 @@ export const metameta = async (
   }[]
 > => {
   const upperBound = range(Object.values(userRatings))
+  // default to the user's range
+  const outputUpperBound = options.range || upperBound
   const userRatingsNormalized = Object.entries(userRatings).map(([title, ratingRaw]) => ({
     title,
     rating: parseFloat(ratingRaw.toString()) / upperBound,
@@ -205,7 +211,7 @@ export const metameta = async (
     return {
       publicationName,
       // mean critic rating indicates how generous the critic was on average
-      meanRating: cleanFloat(totalRating / reviews.length),
+      meanRating: cleanFloat((totalRating / reviews.length) * outputUpperBound),
       // reviews.length is the maximum possible difference between the critic's rating and the user's rating, i.e. the greatest distance a critic could be from the user
       favor: cleanFloat(totalNetDiff / reviews.length),
       // first divide the absolute total diff by the maximum possible diff
