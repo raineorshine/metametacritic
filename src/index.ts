@@ -3,33 +3,35 @@ import jsonMemo from './json-memo.js'
 import range from './range.js'
 import nonNull from './nonNull.js'
 
-interface NuxtData {
+interface NuxtDataRaw<T> {
   data: [
     {
-      content?: {
-        components: [
-          {
-            meta: { componentName: string }
-            items: {
-              author: string
-              date: string
-              publicationName: string
-              quote: string
-              reviewedProduct: {
-                type: string
-                title: string
-                url: string
-                criticScoreSummary: {
-                  score: number
-                  url: string
-                }
-              }
-              score: number
-              url: string
-            }[]
-          },
-        ]
-      }
+      content?: T
+    },
+  ]
+}
+
+interface NuxtData {
+  components: [
+    {
+      meta: { componentName: string }
+      items: {
+        author: string
+        date: string
+        publicationName: string
+        quote: string
+        reviewedProduct: {
+          type: string
+          title: string
+          url: string
+          criticScoreSummary: {
+            score: number
+            url: string
+          }
+        }
+        score: number
+        url: string
+      }[]
     },
   ]
 }
@@ -45,6 +47,15 @@ interface Review {
 
 interface ReviewDiffed extends Review {
   diff: number
+}
+
+/** Scraes data from a NUXT page. */
+const fetchNuxtData = async <T>(url: string): Promise<T | null> => {
+  const html = await fetch(url).then(res => res.text())
+  const start = html.indexOf('window.__NUXT__=') + 'window.__NUXT__='.length
+  const end = html.indexOf('));</script>') + 2
+  const nuxtDataRaw = eval(html.slice(start, end)) as NuxtDataRaw<T>
+  return nuxtDataRaw.data[0].content || null
 }
 
 /** Round a float to a reasonable max number of decimal places, without zeros (e.g. 0.04999999999 is rounded to 0.05) */
@@ -71,12 +82,9 @@ const _criticReviews = async (
   rating: number
   reviews: Review[]
 } | null> => {
-  const url = `https://www.metacritic.com/movie/${slugify(name)}/critic-reviews/?sort-by=Publication%20%28A-Z%29`
-  const html = await fetch(url).then(res => res.text())
-  const start = html.indexOf('window.__NUXT__=') + 'window.__NUXT__='.length
-  const end = html.indexOf('));</script>') + 2
-  const json: NuxtData = eval(html.slice(start, end))
-  const content = json.data[0].content
+  const content = await fetchNuxtData<NuxtData>(
+    `https://www.metacritic.com/movie/${slugify(name)}/critic-reviews/?sort-by=Publication%20%28A-Z%29`,
+  )
 
   if (!content) return null
 
