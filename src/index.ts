@@ -1,6 +1,7 @@
 import fetch from 'node-fetch'
 import jsonMemo from './json-memo.js'
 import range from './range.js'
+import nonNull from './nonNull.js'
 
 interface NuxtData {
   data: [
@@ -126,17 +127,24 @@ export const metameta = async (
     rating: parseFloat(ratingRaw.toString()) / upperBound,
   }))
 
-  const films = await Promise.all(
-    userRatingsNormalized.map(async ({ title, rating }) => {
-      const { reviews, rating: criticRating } = (await criticReviews(title))!
-      const reviewsDiffed = await diff(reviews, rating)
-      return {
-        title,
-        rating: criticRating,
-        reviews: reviewsDiffed,
-      }
-    }),
-  )
+  const films = (
+    await Promise.all(
+      userRatingsNormalized.map(async ({ title, rating }) => {
+        const criticReviewsResult = await criticReviews(title)
+        if (!criticReviewsResult) {
+          console.warn(`No reviews found for ${title}`)
+          return null
+        }
+        const { reviews, rating: criticRating } = criticReviewsResult
+        const reviewsDiffed = await diff(reviews, rating)
+        return {
+          title,
+          rating: criticRating,
+          reviews: reviewsDiffed,
+        }
+      }),
+    )
+  ).filter(nonNull)
 
   // group reviews by publication
   // discard title since we are just aggregating diffs at this point

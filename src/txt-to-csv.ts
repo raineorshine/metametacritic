@@ -3,9 +3,7 @@ import fs from 'fs/promises'
 import path from 'path'
 import { parse } from 'text-block-parser'
 import { json2csv } from 'json-2-csv'
-
-/** Returns true if a value is non null and non undefined. */
-const nonNull = <T>(value: T | null | undefined): value is T => value != null
+import nonNull from './nonNull.js'
 
 const [file] = process.argv.slice(2)
 
