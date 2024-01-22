@@ -79,7 +79,10 @@ const _criticReviews = async (
 
   if (!content) return null
 
-  const reviews = content.components.find(component => component.meta.componentName === 'critic-reviews')?.items || []
+  const reviews = content.components.find(component => component.meta.componentName === 'critic-reviews')?.items
+
+  if (!reviews) return null
+
   const reviewsPicked = reviews.map(review => ({
     author: review.author,
     date: review.date,
