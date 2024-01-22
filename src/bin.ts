@@ -34,3 +34,5 @@ const outputCsv = json2csv(result)
 const ext = path.extname(csvPath)
 const outputFile = `${csvPath.slice(0, -ext.length)}.metameta.csv`
 await fs.writeFile(outputFile, outputCsv)
+
+console.info(`${result.length} publication ratings written to ${outputFile}`)
