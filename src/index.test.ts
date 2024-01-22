@@ -70,6 +70,21 @@ describe('criticReviews', () => {
     expect(result.title).toBe('Moolaadé')
     expect(result.rating).toBe(0.91)
   })
+
+  test('find a film that use a title-year url', async () => {
+    const result = (await criticReviews('Alien'))!
+
+    expect(result.title).toBe('Alien')
+    expect(result.rating).toBe(0.89)
+    expect(result.reviews[0]).toEqual({
+      author: 'Chris Kaltenbach',
+      date: '',
+      publicationName: 'Baltimore Sun',
+      quote: `Alien, even with some scene tinkering that has left this "director's cut" one minute shorter than its original release, is still one of the creepiest, scariest, most shocking films ever.`,
+      rating: 0.88,
+      url: 'http://www.sunspot.net/entertainment/movies/bal-to.alien29oct29,0,216502.story?coll=bal-artslife-movies',
+    })
+  })
 })
 
 test('diff', async () => {

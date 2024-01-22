@@ -11,7 +11,18 @@ interface NuxtDataRaw<T> {
   ]
 }
 
-interface NuxtData {
+interface NuxtSearchData {
+  components: [
+    {
+      meta: { componentName: string }
+      items: {
+        slug: string
+      }[]
+    },
+  ]
+}
+
+interface NuxtCriticReviewsData {
   components: [
     {
       meta: { componentName: string }
@@ -82,8 +93,20 @@ const _criticReviews = async (
   rating: number
   reviews: Review[]
 } | null> => {
-  const content = await fetchNuxtData<NuxtData>(
-    `https://www.metacritic.com/movie/${slugify(name)}/critic-reviews/?sort-by=Publication%20%28A-Z%29`,
+  const searchResults = await fetchNuxtData<NuxtSearchData>(
+    `https://www.metacritic.com/search/${name}?page=1&category=2`,
+  )
+
+  if (!searchResults) return null
+
+  // get the slug from the first search result
+  // fall back to slugifying the name if there are no search results
+  const slug =
+    searchResults.components.find(component => component.meta.componentName === 'search')?.items?.[0]?.slug ||
+    slugify(name)
+
+  const content = await fetchNuxtData<NuxtCriticReviewsData>(
+    `https://www.metacritic.com/movie/${slug}/critic-reviews/?sort-by=Publication%20%28A-Z%29`,
   )
 
   if (!content) return null
