@@ -26,6 +26,7 @@
   },
   "devDependencies": {
     "@types/minimist": "^1.2.5",
+    "@types/murmurhash3js": "^3.0.7",
     "@types/node": "^20.11.0",
     "prettier": "^3.0.2",
     "spawn-please": "^3.0.0",
@@ -38,6 +39,7 @@
   "dependencies": {
     "json-2-csv": "^5.0.1",
     "minimist": "^1.2.8",
+    "murmurhash3js": "^3.0.1",
     "node-fetch": "^3.3.2",
     "text-block-parser": "^1.1.1"
   }

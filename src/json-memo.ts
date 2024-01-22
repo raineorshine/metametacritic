@@ -1,5 +1,6 @@
 import fs from 'fs/promises'
 import path from 'path'
+import murmurHash3 from 'murmurhash3js'
 
 /** The path of the cache directory that persists critic reviews. */
 export const cachePath = '.json-memo'
@@ -9,18 +10,18 @@ const keySet = new Set<string>()
 
 /** Returns a memoized function that caches memoized results to a json file in the cachePath. */
 async function jsonMemo<A extends unknown[], R>(f: (...args: A) => R | Promise<R>) {
-  const key = f.name || f.toString()
+  // if the function does not have a name, use a hash of the function body as the key
+  const key = f.name || murmurHash3.x64.hash128(f.toString())
+
   if (keySet.has(key)) {
     throw new Error(`Memoization key already exists: ${key}. Use a named function with a different name.`)
   } else {
     keySet.add(key)
   }
 
-  /** Gets the path of the cache file for the given argument. */
-  const valPath = (...args: A) => path.join(cachePath, `${key}-${args.join('\x01')}.json`)
-
   const memo = async (...args: A) => {
-    const file = valPath(...args)
+    const file = path.join(cachePath, `${key}-${args.join('\x01')}.json`)
+
     let value: R | undefined
 
     try {
